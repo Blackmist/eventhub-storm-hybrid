@@ -20,7 +20,7 @@ This is an extremely simple example of writing to and reading from Azure Event H
 
 * **Azure SDK for Visual Studio** - at least version 2.5. This gives you the Azure entries in Server Explorer and the ability to view things like table storage
 
-* **HDInsight Tools for Visual Studio ** - [http://azure.microsoft.com/en-us/documentation/articles/hdinsight-hadoop-visual-studio-tools-get-started/](http://azure.microsoft.com/en-us/documentation/articles/hdinsight-hadoop-visual-studio-tools-get-started/) has the steps to install and configure. This provides C# Storm topology templates and some utilities for working with HDInsight
+* **HDInsight Tools for Visual Studio** - [http://azure.microsoft.com/en-us/documentation/articles/hdinsight-hadoop-visual-studio-tools-get-started/](http://azure.microsoft.com/en-us/documentation/articles/hdinsight-hadoop-visual-studio-tools-get-started/) has the steps to install and configure. This provides C# Storm topology templates and some utilities for working with HDInsight
 
 * **eventhubs-storm-spout-0.9-jar-with-dependencies.jar** - this contains the Event Hub Spout and Bolt. You an find this in the **lib** folder of the [https://github.com/hdinsight-hdinsight-storm-examples](https://github.com/hdinsight-hdinsight-storm-examples) repository
 
