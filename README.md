@@ -22,7 +22,7 @@ This is an extremely simple example of writing to and reading from Azure Event H
 
 * **HDInsight Tools for Visual Studio** - [http://azure.microsoft.com/en-us/documentation/articles/hdinsight-hadoop-visual-studio-tools-get-started/](http://azure.microsoft.com/en-us/documentation/articles/hdinsight-hadoop-visual-studio-tools-get-started/) has the steps to install and configure. This provides C# Storm topology templates and some utilities for working with HDInsight
 
-* **eventhubs-storm-spout-0.9-jar-with-dependencies.jar** - this contains the Event Hub Spout and Bolt. You an find this in the **lib** folder of the [https://github.com/hdinsight-hdinsight-storm-examples](https://github.com/hdinsight-hdinsight-storm-examples) repository
+* **eventhubs-storm-spout-0.9-jar-with-dependencies.jar** - this contains the Event Hub Spout and Bolt. You an find this in the **lib** folder of the [https://github.com/hdinsight/hdinsight-storm-examples](https://github.com/hdinsight/hdinsight-storm-examples) repository
 
 * **Azure Event Hub** - you need to create an Event Hub, with two policies defined - one that can send, and one that can listen. You will need the following information from the Event Hub configuration.
 
