@@ -31,6 +31,8 @@ namespace EventHubWriter
             //Get the partition count
             int partitionCount = Properties.Settings.Default.EventHubPartitionCount;
             //Create a deserializer for JSON to java.lang.String
+            //so that Java components can consume data emitted by
+            //C# components
             List<string> javaDeserializerInfo =
                 new List<string>() { "microsoft.scp.storm.multilang.CustomizedInteropJSONDeserializer", "java.lang.String" };
             

@@ -34,7 +34,8 @@ namespace EventHubWriter
             //It's a string
             outputSchema.Add("default", new List<Type>() { typeof(string) });
             this.ctx.DeclareComponentSchema(new ComponentStreamSchema(null, outputSchema));
-            //Declare a custom serializer
+            //Declare a custom serializer - this matches up with
+            //the serializer declared in Program.cs
             this.ctx.DeclareCustomizedSerializer(new CustomizedInteropJSONSerializer());
         }
         /// <summary>

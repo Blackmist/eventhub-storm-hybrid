@@ -38,7 +38,7 @@ namespace EventHubReader
             //Stream contains string values
             inputSchema.Add("default", new List<Type>() { typeof(string) });
             this.ctx.DeclareComponentSchema(new ComponentStreamSchema(inputSchema, null));
-            //Use a custom deserializer
+            //Use a custom deserializer. This matches with the one declared in Program.cs
             this.ctx.DeclareCustomizedDeserializer(new CustomizedInteropJSONDeserializer());
             //Connect to storage
             CloudStorageAccount storageAccount = CloudStorageAccount.Parse(Properties.Settings.Default.StorageConnection);
