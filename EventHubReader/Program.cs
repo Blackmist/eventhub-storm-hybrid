@@ -41,6 +41,41 @@ namespace EventHubReader
                     Properties.Settings.Default.EventHubName,
                     partitionCount,
                     "")); //zookeeper connection string - leave empty
+            /* NOTE: Possible constructors for EventHubSpoutConfig are:
+             * EventHubSpoutConfig(
+             *      String PolicyName, 
+             *      String PolicyKey, 
+             *      String Namespace, 
+             *      String HubName, 
+             *      Int PartitionCount)
+             * EventHubSpoutConfig(
+             *      String PolicyName, 
+             *      String PolicyKey, 
+             *      String Namespace, 
+             *      String HubName, 
+             *      Int PartitionCount, 
+             *      String ZooKeeperConnection)
+             * EventHubSpoutConfig(
+             *      String PolicyName, 
+             *      String PolicyKey, 
+             *      String Namespace, 
+             *      String HubName, 
+             *      Int PartitionCount, 
+             *      String ZooKeeperConnection,
+             *      Int CheckPointIntervalInSeconds,
+             *      Int ReceiverCredits);
+             * EventHubSpoutConfig(
+             *      String PolicyName, 
+             *      String PolicyKey, 
+             *      String Namespace, 
+             *      String hubName, 
+             *      Int PartitionCount, 
+             *      String ZooKeeperConnection,
+             *      Int CheckPointIntervalInSeconds,
+             *      Int ReceiverCredits,
+             *      Int MaxPendingMsgsPerPartition,
+             *      Long EnqueueTimeFilter);
+             */
 
             //Set the spout to use the JavaComponentConstructor
             topologyBuilder.SetJavaSpout(
@@ -52,11 +87,15 @@ namespace EventHubReader
             List<string> javaSerializerInfo = new List<string>() { "microsoft.scp.storm.multilang.CustomizedInteropJSONSerializer" };
 
             //Set the C# bolt that consumes data from the spout
+            //NOTE: The EventHubSpout component requires ACK's to be returned
+            //by downstream components. If not, it will stop receiveing messages
+            //after the configured MaxPendingMsgsPerPartition value (default 1024).
             topologyBuilder.SetBolt(
                 "Bolt",                                              //Friendly name of this component
                 Bolt.Get,
                 new Dictionary<string, List<string>>(),
-                partitionCount).                                     //Parallelisim hint - partition count
+                partitionCount,                                      //Parallelisim hint - partition count
+                true).                                               //Enable ACK's, needed for the spout    
                 DeclareCustomizedJavaSerializer(javaSerializerInfo). //Use the serializer when sending to the bolt
                 shuffleGrouping("EventHubSpout");                    //Consume data from the 'EventHubSpout' component
 

@@ -6,7 +6,7 @@
 *.user
 *.userosscache
 *.sln.docstates
-SubmitConfig.xml
+*/SubmitConfig.xml
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs

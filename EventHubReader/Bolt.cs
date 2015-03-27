@@ -79,6 +79,8 @@ namespace EventHubReader
                 //NOTE: In production this could be improved by using batch inserts
                 TableOperation insertOperation = TableOperation.Insert(device);
                 table.Execute(insertOperation);
+                //ACK the tuple so the spout knows it was processed
+                this.ctx.Ack(tuple);
             }
         }
     }
