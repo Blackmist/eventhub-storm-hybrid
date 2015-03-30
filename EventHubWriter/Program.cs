@@ -65,6 +65,11 @@ namespace EventHubWriter
                     partitionCount). //Parallelism hint uses partition count
                 shuffleGrouping("Spout"); //Consume data from spout
 
+            topologyBuilder.SetTopologyConfig(new Dictionary<string, string>()
+                {
+                    {"topology.workers", "1"}  //Change to set the number of workers to create
+                });
+
             return topologyBuilder;
         }
     }

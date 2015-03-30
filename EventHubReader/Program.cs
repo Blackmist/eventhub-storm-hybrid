@@ -99,6 +99,11 @@ namespace EventHubReader
                 DeclareCustomizedJavaSerializer(javaSerializerInfo). //Use the serializer when sending to the bolt
                 shuffleGrouping("EventHubSpout");                    //Consume data from the 'EventHubSpout' component
 
+            topologyBuilder.SetTopologyConfig(new Dictionary<string, string>()
+                {
+                    {"topology.workers", "1"}  //Change to set the number of workers to create
+                });
+
             return topologyBuilder;
         }
     }
