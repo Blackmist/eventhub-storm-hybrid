@@ -34,7 +34,7 @@ namespace EventHubWriter.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("The writer policy key")]
+        [global::System.Configuration.DefaultSettingValueAttribute("The policy key for the \'writer\' policy")]
         public string EventHubPolicyKey {
             get {
                 return ((string)(this["EventHubPolicyKey"]));
@@ -43,7 +43,7 @@ namespace EventHubWriter.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("The Event Hub namespace")]
+        [global::System.Configuration.DefaultSettingValueAttribute("The namespace for this hub")]
         public string EventHubNamespace {
             get {
                 return ((string)(this["EventHubNamespace"]));
@@ -52,7 +52,7 @@ namespace EventHubWriter.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("The Event Hub name")]
+        [global::System.Configuration.DefaultSettingValueAttribute("The hub name")]
         public string EventHubName {
             get {
                 return ((string)(this["EventHubName"]));
