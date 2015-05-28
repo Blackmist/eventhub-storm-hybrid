@@ -342,12 +342,6 @@
             <param name="ID">State ID</param>
             <param name="mode">Sate Mode</param>
         </member>
-        <member name="M:Microsoft.SCP.State.#ctor(Microsoft.SCP.StateStore)">
-            <summary>
-            Internal constructor for creating a state object with a new ID
-            </summary>
-            <param name="store">State Store</param>
-        </member>
         <member name="M:Microsoft.SCP.State.GetStatus">
             <summary>
             Get the status of the state object
@@ -862,14 +856,6 @@
              @param taskId the taskId to send the new tuple to
              @param tuple the new output tuple from this bolt
         </member>
-        <member name="M:Microsoft.SCP.BatchOutputCollector.Emit(System.Collections.Generic.List{System.Object})">
-            Emits a tuple to the default output stream.
-        </member>
-        <member name="M:Microsoft.SCP.BatchOutputCollector.EmitDirect(System.Int32,System.Collections.Generic.List{System.Object})">
-            Emits a tuple to the specified task on the default output stream. This output
-            stream must have been declared as a direct stream, and the specified task must
-            use a direct grouping on this stream to receive the message.
-        </member>
         <member name="T:Microsoft.SCP.ISCPPlugin">
             <summary>
             ISCPPlugin is the common interface for all kinds of plugins. 
@@ -942,7 +928,7 @@
         </member>
         <member name="M:Microsoft.SCP.ISCPTxSpout.Fail(System.Int64,System.Collections.Generic.Dictionary{System.String,System.Object})">
             <summary>
-            Reserved method, not been implemented.
+            Reserved method.
             Storm will replay a transaction automatically if it fails, so Fail() should not be called in normal case. 
             This method is reserved for add new features, such as metadata validataion or something else.
             </summary>
@@ -1008,22 +994,6 @@
             <summary>
             Returns the number of fields in this tuple.
             </summary>
-            <returns></returns>
-        </member>
-        <member name="M:Microsoft.SCP.SCPTuple.FieldIndex(System.String)">
-            <summary>
-            Notice: this method has NOT been implemented yet.
-            Returns the position of the specified field in this tuple.
-            </summary>
-            <param name="field">The name of field</param>
-            <returns></returns>
-        </member>
-        <member name="M:Microsoft.SCP.SCPTuple.Contains(System.String)">
-            <summary>
-            Notice: this method has NOT been implemented yet.
-            Returns true if this tuple contains the specified name of the field.
-            </summary>
-            <param name="field">The name of field</param>
             <returns></returns>
         </member>
         <member name="M:Microsoft.SCP.SCPTuple.GetValue(System.Int32)">
@@ -1111,35 +1081,6 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Microsoft.SCP.SCPTuple.GetFields">
-            <summary>
-            Notice: this method has NOT been implemented yet.
-            Gets the names of the fields in this tuple.
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:Microsoft.SCP.SCPTuple.Select(Microsoft.SCP.Fields)">
-            <summary>
-            Notice: this method has NOT been implemented yet.
-            Returns a subset of the tuple based on the fields selector.
-            </summary>
-            <param name="selector"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Microsoft.SCP.SCPTuple.GetSourceGlobalStreamid">
-            <summary>
-            Notice: this method has NOT been implemented yet.
-            Returns the global stream id (component + stream) of this tuple.
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:Microsoft.SCP.SCPTuple.GetSourceComponent">
-            <summary>
-            Notice: this method has NOT been implemented yet.
-            Gets the id of the component that created this tuple.
-            </summary>
-            <returns></returns>
-        </member>
         <member name="M:Microsoft.SCP.SCPTuple.GetSourceTask">
             <summary>
             Gets the id of the task that created this tuple.
@@ -1188,6 +1129,23 @@
             <param name="config"></param>
             <returns></returns>
         </member>
+        <member name="M:Microsoft.SCP.Topology.BoltDeclarer.addConfigurations(Microsoft.SCP.Topology.StormConfig)">
+            <summary>
+            Add specified configuration to component
+            </summary>
+            <param name="config"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Microsoft.SCP.Topology.EventHubSpoutConfig">
+            <summary>
+            EventHubSpoutConfig is used to define configuration for Java EventHubSpout.
+            </summary>
+        </member>
+        <member name="M:Microsoft.SCP.Topology.EventHubSpoutConfig.#ctor(System.String,System.String,System.String,System.String,System.Int32)">
+            <summary>
+            Constructor for EventHubSpoutConfig.
+            </summary>
+        </member>
         <member name="T:Microsoft.SCP.Topology.JavaComponentConstructor">
             <summary>
             JavaComponentConstructor is used to define a Java constructor for Java Spout/Bolt in C# code.
@@ -1201,6 +1159,16 @@
             <param name="javaClassName">Class name of the Java Spout/Bolt</param>
             <param name="paramters">Parameters for Java Constructor</param>
             <param name="paramJavaTypes">Data types of Parameters</param>
+            <param name="paramSerializer">C# serializer object</param>
+            <param name="paramDeserializerJavaType">Java Deserializer data type string</param>
+        </member>
+        <member name="M:Microsoft.SCP.Topology.JavaComponentConstructor.#ctor(System.String,System.Collections.Generic.List{System.Tuple{System.String,System.Object}},Microsoft.SCP.ICustomizedInteropCSharpSerializer,System.String)">
+            <summary>
+            Define a Java Constructor with Java classname, Java Constructor parameters
+            and customized Serializer/Deserializer for intercommunication between C# and Java.
+            </summary>
+            <param name="javaClassName">Class name of the Java Spout/Bolt</param>
+            <param name="constructorParameters">Parameters for Java Constructor, it includes both type and value info of parameters</param>
             <param name="paramSerializer">C# serializer object</param>
             <param name="paramDeserializerJavaType">Java Deserializer data type string</param>
         </member>
@@ -1218,6 +1186,13 @@
             <param name="paramters">Parameters for Java Constructor</param>
             <param name="paramJavaTypes">Data types of Parameters</param>
         </member>
+        <member name="M:Microsoft.SCP.Topology.JavaComponentConstructor.#ctor(System.String,System.Collections.Generic.List{System.Tuple{System.String,System.Object}})">
+            <summary>
+            Define a Java Constructor with Java classname, parameters for Java Constructor, data types of parameters.
+            </summary>
+            <param name="javaClassName">Class name of the Java Spout/Bolt</param>
+            <param name="constructorParameters">Parameters for Java Constructor, it includes both type and value info of parameters</param>
+        </member>
         <member name="M:Microsoft.SCP.Topology.JavaComponentConstructor.CreateFromClojureExpr(System.String)">
             <summary>
             Create a Java Constructor from clojure code
@@ -1233,6 +1208,13 @@
             <returns></returns>
         </member>
         <member name="M:Microsoft.SCP.Topology.SpoutDeclarer.addConfigurations(System.Collections.Generic.Dictionary{System.String,System.String})">
+            <summary>
+            Add specified configuration to component
+            </summary>
+            <param name="config"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Microsoft.SCP.Topology.SpoutDeclarer.addConfigurations(Microsoft.SCP.Topology.StormConfig)">
             <summary>
             Add specified configuration to component
             </summary>
@@ -1290,6 +1272,12 @@
             Define a new Java spout to topology by specifying a spoutName and Java Component Constructor
             </summary>
         </member>
+        <member name="M:Microsoft.SCP.Topology.TopologyBuilder.SetEventHubSpout(System.String,Microsoft.SCP.Topology.EventHubSpoutConfig,System.Int32)">
+            <summary>
+            Define a Java EventHubSpout by specifying a spoutName and eventHubSpoutConfig
+            EventHubSpout is for non-transactional topology, and requires acks, so should set "enableAck = true" in the downstream bolts.
+            </summary>
+        </member>
         <member name="M:Microsoft.SCP.Topology.TopologyBuilder.SetBolt(System.String,System.String,System.Collections.Generic.List{System.String},System.Collections.Generic.Dictionary{System.String,System.Collections.Generic.List{System.String}},System.Int32,System.Boolean)">
             <summary>
             Define a new C# bolt to topology by specifying a pluginName and pluginArgs
@@ -1301,6 +1289,11 @@
             </summary>
         </member>
         <member name="M:Microsoft.SCP.Topology.TopologyBuilder.SetTopologyConfig(System.Collections.Generic.Dictionary{System.String,System.String})">
+            <summary>
+            Define a specified configuration to this topology
+            </summary>
+        </member>
+        <member name="M:Microsoft.SCP.Topology.TopologyBuilder.SetTopologyConfig(Microsoft.SCP.Topology.StormConfig)">
             <summary>
             Define a specified configuration to this topology
             </summary>
@@ -1372,6 +1365,61 @@
         <member name="M:Microsoft.SCP.Topology.TransactionalTopologyBuilder.SetTopologyConfig(System.Collections.Generic.Dictionary{System.String,System.String})">
             <summary>
             Define a specified configuration to this topology
+            </summary>
+        </member>
+        <member name="M:Microsoft.SCP.Topology.TransactionalTopologyBuilder.SetTopologyConfig(Microsoft.SCP.Topology.StormConfig)">
+            <summary>
+            Define a specified configuration to this topology
+            </summary>
+        </member>
+        <member name="T:Microsoft.SCP.Topology.StormConfig">
+            <summary>
+            This class provides a convenient way to create storm configuration.
+            </summary>
+        </member>
+        <member name="M:Microsoft.SCP.Topology.StormConfig.#ctor">
+            <summary>
+            Create an empty StormConfig.
+            </summary>
+        </member>
+        <member name="M:Microsoft.SCP.Topology.StormConfig.setDebug(System.Boolean)">
+            <summary>
+            Set "topology.debug" parameter.
+            </summary>
+        </member>
+        <member name="M:Microsoft.SCP.Topology.StormConfig.setNumWorkers(System.Int32)">
+            <summary>
+            Set "topology.workers" parameter.
+            </summary>
+        </member>
+        <member name="M:Microsoft.SCP.Topology.StormConfig.setNumAckers(System.Int32)">
+            <summary>
+            Set "topology.acker.executors" parameter.
+            </summary>
+        </member>
+        <member name="M:Microsoft.SCP.Topology.StormConfig.setMessageTimeoutSecs(System.Int32)">
+            <summary>
+            Set "topology.message.timeout.secs" parameter.
+            </summary>
+        </member>
+        <member name="M:Microsoft.SCP.Topology.StormConfig.setMaxSpoutPending(System.Int32)">
+            <summary>
+            Set "topology.max.spout.pending" parameter.
+            </summary>
+        </member>
+        <member name="M:Microsoft.SCP.Topology.StormConfig.setStatsSampleRate(System.Double)">
+            <summary>
+            Set "topology.stats.sample.rate" parameter.
+            </summary>
+        </member>
+        <member name="M:Microsoft.SCP.Topology.StormConfig.setWorkerChildOps(System.String)">
+            <summary>
+            Set "worker.childopts" parameter.
+            </summary>
+        </member>
+        <member name="M:Microsoft.SCP.Topology.StormConfig.Set(System.String,System.String)">
+            <summary>
+            This method provides a general way to set various configuration item.
             </summary>
         </member>
         <member name="T:Microsoft.SCP.Topology.TopologyDescriptor">
@@ -1465,23 +1513,6 @@
             Get the task list of the specified component
             </summary>
             <param name="componentId"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Microsoft.SCP.TopologyContext.GetComponentStreams(System.String)">
-            <summary>
-            Notice: this method has NOT been implemented yet.
-            Get streams of the specified component
-            </summary>
-            <param name="componentId"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Microsoft.SCP.TopologyContext.GetComponentOutputFields(System.String,System.String)">
-            <summary>
-            Notice: this method has NOT been implemented yet.
-            Gets the declared output fields for the specified component/stream.
-            </summary>
-            <param name="componentId"></param>
-            <param name="streamId"></param>
             <returns></returns>
         </member>
     </members>
