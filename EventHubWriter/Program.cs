@@ -48,17 +48,16 @@ namespace EventHubWriter
                 DeclareCustomizedJavaDeserializer(javaDeserializerInfo); //Deserializer for the output stream
 
             //Create constructor for the Java bolt
-            JavaComponentConstructor constructor = new JavaComponentConstructor(
-                "com.microsoft.eventhubs.bolt.EventHubBoltConfig",
-                new List<Tuple<string, object>>()
-                {
-                    Tuple.Create<string, object>(JavaComponentConstructor.JAVA_LANG_STRING, Properties.Settings.Default.EventHubPolicyName),
-                    Tuple.Create<string, object>(JavaComponentConstructor.JAVA_LANG_STRING, Properties.Settings.Default.EventHubPolicyKey),
-                    Tuple.Create<string, object>(JavaComponentConstructor.JAVA_LANG_STRING, Properties.Settings.Default.EventHubNamespace), 
-                    Tuple.Create<string, object>(JavaComponentConstructor.JAVA_LANG_STRING, "servicebus.windows.net"), //suffix for servicebus fqdn
-                    Tuple.Create<string, object>(JavaComponentConstructor.JAVA_LANG_STRING, Properties.Settings.Default.EventHubName), 
-                    Tuple.Create<string, object>(JavaComponentConstructor.JAVA_LANG_STRING, "true")
-                });
+            JavaComponentConstructor constructor =
+                JavaComponentConstructor.CreateFromClojureExpr(
+                String.Format(@"(com.microsoft.eventhubs.bolt.EventHubBolt. (com.microsoft.eventhubs.bolt.EventHubBoltConfig. " +
+                @"""{0}"" ""{1}"" ""{2}"" ""{3}"" ""{4}"" {5}))",
+                Properties.Settings.Default.EventHubPolicyName,
+                Properties.Settings.Default.EventHubPolicyKey,
+                Properties.Settings.Default.EventHubNamespace,
+                "servicebus.windows.net", //suffix for servicebus fqdn
+                Properties.Settings.Default.EventHubName,
+                "true"));
 
             topologyBuilder.SetJavaBolt(
                     "EventHubBolt",
