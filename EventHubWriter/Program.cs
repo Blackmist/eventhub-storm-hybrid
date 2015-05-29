@@ -54,9 +54,9 @@ namespace EventHubWriter
                 @"""{0}"" ""{1}"" ""{2}"" ""{3}"" ""{4}"" {5}))",
                 Properties.Settings.Default.EventHubPolicyName,
                 Properties.Settings.Default.EventHubPolicyKey,
-                Properties.Settings.Default.EventHubNamespace, 
+                Properties.Settings.Default.EventHubNamespace,
                 "servicebus.windows.net", //suffix for servicebus fqdn
-                Properties.Settings.Default.EventHubName, 
+                Properties.Settings.Default.EventHubName,
                 "true"));
 
             topologyBuilder.SetJavaBolt(
@@ -65,10 +65,9 @@ namespace EventHubWriter
                     partitionCount). //Parallelism hint uses partition count
                 shuffleGrouping("Spout"); //Consume data from spout
 
-            topologyBuilder.SetTopologyConfig(new Dictionary<string, string>()
-                {
-                    {"topology.workers", "1"}  //Change to set the number of workers to create
-                });
+            StormConfig config = new StormConfig();
+            config.setNumWorkers(1); //Set the number of workers
+            topologyBuilder.SetTopologyConfig(config);
 
             return topologyBuilder;
         }

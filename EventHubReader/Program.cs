@@ -31,56 +31,18 @@ namespace EventHubReader
 
             //Get the partition count
             int partitionCount = Properties.Settings.Default.EventHubPartitionCount;
-            //Create the constructor for the Java spout
-            JavaComponentConstructor constructor = JavaComponentConstructor.CreateFromClojureExpr(
-                String.Format(@"(com.microsoft.eventhubs.spout.EventHubSpout. (com.microsoft.eventhubs.spout.EventHubSpoutConfig. " +
-                    @"""{0}"" ""{1}"" ""{2}"" ""{3}"" {4} ""{5}""))",
-                    Properties.Settings.Default.EventHubPolicyName,
-                    Properties.Settings.Default.EventHubPolicyKey,
-                    Properties.Settings.Default.EventHubNamespace,
-                    Properties.Settings.Default.EventHubName,
-                    partitionCount,
-                    "")); //zookeeper connection string - leave empty
-            /* NOTE: Possible constructors for EventHubSpoutConfig are:
-             * EventHubSpoutConfig(
-             *      String PolicyName, 
-             *      String PolicyKey, 
-             *      String Namespace, 
-             *      String HubName, 
-             *      Int PartitionCount)
-             * EventHubSpoutConfig(
-             *      String PolicyName, 
-             *      String PolicyKey, 
-             *      String Namespace, 
-             *      String HubName, 
-             *      Int PartitionCount, 
-             *      String ZooKeeperConnection)
-             * EventHubSpoutConfig(
-             *      String PolicyName, 
-             *      String PolicyKey, 
-             *      String Namespace, 
-             *      String HubName, 
-             *      Int PartitionCount, 
-             *      String ZooKeeperConnection,
-             *      Int CheckPointIntervalInSeconds,
-             *      Int ReceiverCredits);
-             * EventHubSpoutConfig(
-             *      String PolicyName, 
-             *      String PolicyKey, 
-             *      String Namespace, 
-             *      String hubName, 
-             *      Int PartitionCount, 
-             *      String ZooKeeperConnection,
-             *      Int CheckPointIntervalInSeconds,
-             *      Int ReceiverCredits,
-             *      Int MaxPendingMsgsPerPartition,
-             *      Long EnqueueTimeFilter);
-             */
+            //Create the configuration for the EventHub spout
+            EventHubSpoutConfig ehConfig = new EventHubSpoutConfig(
+                Properties.Settings.Default.EventHubPolicyName,
+                Properties.Settings.Default.EventHubPolicyKey,
+                Properties.Settings.Default.EventHubNamespace,
+                Properties.Settings.Default.EventHubName,
+                partitionCount);
 
             //Set the spout to use the JavaComponentConstructor
-            topologyBuilder.SetJavaSpout(
+            topologyBuilder.SetEventHubSpout(
                 "EventHubSpout",  //Friendly name of this component
-                constructor,      //Pass in the Java constructor
+                ehConfig,      //Pass in the configuration
                 partitionCount);  //Parallelism hint - partition count
 
             // Use a JSON Serializer to serialize data from the Java Spout into a JSON string
@@ -99,10 +61,12 @@ namespace EventHubReader
                 DeclareCustomizedJavaSerializer(javaSerializerInfo). //Use the serializer when sending to the bolt
                 shuffleGrouping("EventHubSpout");                    //Consume data from the 'EventHubSpout' component
 
-            topologyBuilder.SetTopologyConfig(new Dictionary<string, string>()
-                {
-                    {"topology.workers", "1"}  //Change to set the number of workers to create
-                });
+            //Create a new configuration for the topology
+            StormConfig config = new StormConfig();
+            config.setNumWorkers(1); //Set the number of workers
+
+            //Set the configuration for the topology
+            topologyBuilder.SetTopologyConfig(config);
 
             return topologyBuilder;
         }
