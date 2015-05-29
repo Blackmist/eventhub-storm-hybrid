@@ -42,7 +42,7 @@ namespace EventHubReader
             //Set the spout to use the JavaComponentConstructor
             topologyBuilder.SetEventHubSpout(
                 "EventHubSpout",  //Friendly name of this component
-                ehConfig,      //Pass in the Java constructor
+                ehConfig,      //Pass in the configuration
                 partitionCount);  //Parallelism hint - partition count
 
             // Use a JSON Serializer to serialize data from the Java Spout into a JSON string
